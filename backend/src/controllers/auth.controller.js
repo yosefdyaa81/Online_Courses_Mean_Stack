@@ -1,6 +1,6 @@
-const authServices = require("./auth.service");
+const authServices = require("../services/auth.service");
 const crypto = require("crypto");
-const googleOAuth2Client = require("../../config/google.config");
+const googleOAuth2Client = require("../config/google.config");
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;

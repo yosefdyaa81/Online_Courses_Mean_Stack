@@ -1,18 +1,18 @@
 const bcrypt = require("bcryptjs");
-const User = require("../users/user.model");
+const User = require("../models/user.model");
 const {
   hashToken,
   generateResetToken,
   generateEmailVerificationToken,
-} = require("./auth.utils");
-const RefreshToken = require("./refreshToken.model");
+} = require("../utils/auth.utils");
+const RefreshToken = require("../models/refreshToken.model");
 const {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-} = require("../../utils/jwt");
+} = require("../utils/jwt");
 
-const { sendVerificationEmail } = require("../../services/email.service");
+const { sendVerificationEmail } = require("./email.service");
 
 const jwt = require("jsonwebtoken");
 

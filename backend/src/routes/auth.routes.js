@@ -1,5 +1,5 @@
 const express = require("express");
-const authController = require("./auth.controller");
+const authController = require("../controllers/auth.controller");
 
 const {
   registerSchema,
@@ -7,10 +7,10 @@ const {
   forgotPasswordSchema,
   resetPasswordSchema,
   resendVerificationSchema
-} = require("./auth.validator");
+} = require("../validators/auth.validator");
 
-const validate = require("../../middlewares/validate.middleware");
-const { protect, restrictTo } = require("../../middlewares/auth.middleware");
+const validate = require("../middlewares/validate.middleware");
+const { protect, restrictTo } = require("../middlewares/auth.middleware");
 const router = express.Router();
 
 router.post("/register", validate(registerSchema), authController.register);
