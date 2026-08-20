@@ -7,6 +7,10 @@ const cookieParser = require("cookie-parser");
 
 //routes
 const authRoutes=require("./modules/auth/auth.routes");
+const categoryRoutes = require("./modules/category/category.routes");
+const courseRoutes = require("./modules/course/course.routes");
+const topicRoutes=require("./modules/topic/topic.routes");
+
 const app = express();
 
 app.use(helmet());
@@ -37,6 +41,18 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/auth",authRoutes);
 
+app.use("/api/categories",categoryRoutes);
 
+app.use("/api/courses", courseRoutes);
+
+app.use("/api/topics",topicRoutes);
+
+
+
+
+
+
+const errorHandler = require("./middlewares/error.middleware");
+app.use(errorHandler);
 
 module.exports = app;
