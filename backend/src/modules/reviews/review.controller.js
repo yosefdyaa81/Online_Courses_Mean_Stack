@@ -13,9 +13,9 @@ exports.createReview = async (req, res) => {
 // عرض كل الـ Reviews
 exports.getReviews = async (req, res) => {
   try {
-    const reviews = await Review.find();
-    //   .populate("user", "name email")
-    //   .populate("course", "title slug");
+    const reviews = await Review.find()
+      .populate("user", "name email")
+      .populate("course", "title slug");
     res.json(reviews);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -25,9 +25,9 @@ exports.getReviews = async (req, res) => {
 // عرض Review واحد
 exports.getReviewById = async (req, res) => {
   try {
-    const review = await Review.findById(req.params.id);
-    //   .populate("user", "name email")
-    //   .populate("course", "title slug");
+    const review = await Review.findById(req.params.id)
+      .populate("user", "name email")
+      .populate("course", "title slug");
     if (!review) return res.status(404).json({ message: "Review not found" });
     res.json(review);
   } catch (err) {

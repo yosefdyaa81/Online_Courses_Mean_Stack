@@ -11,8 +11,7 @@ exports.createTrack = async (req, res) => {
 
 exports.getTracks = async (req, res) => {
   try {
-    const tracks = await Track.find();
-    // .populate("courses")
+    const tracks = await Track.find().populate("courses");
     res.json(tracks);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -21,8 +20,7 @@ exports.getTracks = async (req, res) => {
 
 exports.getTrackById = async (req, res) => {
   try {
-    const track = await Track.findById(req.params.id);
-    // .populate("courses");
+    const track = await Track.findById(req.params.id).populate("courses");
     if (!track) return res.status(404).json({ message: "Track not found" });
     res.json(track);
   } catch (err) {

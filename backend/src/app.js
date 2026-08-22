@@ -4,6 +4,12 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 
+//routes
+const authRoutes = require("./modules/auth/auth.routes");
+const categoryRoutes = require("./modules/category/category.routes");
+const courseRoutes = require("./modules/course/course.routes");
+const topicRoutes = require("./modules/topic/topic.routes");
+
 const app = express();
 
 app.use(express.json());
@@ -27,7 +33,6 @@ app.get("/api/health", (req, res) => {
 });
 
 //routes
-const authRoutes = require("./modules/auth/auth.routes");
 
 const trackRoutes = require("./modules/track/track.routes");
 
@@ -38,5 +43,11 @@ const reviewRoutes = require("./modules/reviews/review.routes");
 app.use("/api/tracks", trackRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/api/topics", topicRoutes);
+
+const errorHandler = require("./middlewares/error.middleware");
+app.use(errorHandler);
 
 module.exports = app;
