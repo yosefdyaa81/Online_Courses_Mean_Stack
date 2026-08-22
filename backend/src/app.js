@@ -7,6 +7,8 @@ const cookieParser = require("cookie-parser");
 
 //routes
 const authRoutes=require("./modules/auth/auth.routes");
+const userRoutes=require("./modules/users/user.routes");
+const progressRoutes=require("./modules/progress/progress.routes");
 const app = express();
 
 app.use(helmet());
@@ -36,6 +38,8 @@ app.get("/api/health", (req, res) => {
 //endpoints
 
 app.use("/api/auth",authRoutes);
+app.use("/api/users",userRoutes);
+app.use("/api/progress",progressRoutes);
 
 
 
