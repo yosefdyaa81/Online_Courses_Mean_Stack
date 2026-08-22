@@ -3,7 +3,6 @@ const User = require('./user.model.js');
 
 
 
-
 const getme = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);

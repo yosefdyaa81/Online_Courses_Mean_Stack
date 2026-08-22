@@ -11,6 +11,7 @@ const {
   generateRefreshToken,
   verifyRefreshToken,
 } = require("../../utils/jwt");
+const ApiError=require("../../utils/ApiError");
 
 const { sendVerificationEmail } = require("../../services/email.service");
 
@@ -21,7 +22,7 @@ const register = async ({ name, email, password }) => {
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    throw new Error("Email already registered");
+    throw ApiError.conflict("Email already registered");
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -42,10 +43,8 @@ const register = async ({ name, email, password }) => {
     await sendVerificationEmail(user.email, verificationToken);
   } catch (error) {
     await User.findByIdAndDelete(user._id);
-  console.error("EMAIL ERROR:", error);
-
-
-    throw new Error("Failed to send verification email");
+    console.error("EMAIL ERROR:", error);
+    throw ApiError.badRequest("Failed to send verification email");
   }
 
   return user;
@@ -62,7 +61,7 @@ const verifyEmail = async (token) => {
   });
 
   if (!user) {
-    throw new Error("Invalid or expired verification token");
+    throw ApiError.badRequest("Invalid or expired verification token");
   }
 
   user.isEmailVerified = true;
@@ -78,21 +77,21 @@ const login = async ({ email, password }) => {
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    throw new Error("Invalid email or password");
+    throw ApiError.badRequest("Invalid email or password");
   }
 
   if (!user.isActive) {
-    throw new Error("Your account is inactive");
+    throw ApiError.badRequest("Your account is inactive");
   }
 
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCorrect) {
-    throw new Error("Invalid email pr password");
+    throw ApiError.badRequest("Invalid email pr password");
   }
 
   if (!user.isEmailVerified) {
-  throw new Error(
+  throw ApiError.badRequest(
     "Please verify your email before logging in."
   );
 }
@@ -122,7 +121,7 @@ const login = async ({ email, password }) => {
 
 const refreshAccessToken = async (refreshToken) => {
   if (!refreshToken) {
-    throw new Error("Refresh token is required.");
+    throw ApiError.badRequest("Refresh token is required.");
   }
 
   const decoded = verifyRefreshToken(refreshToken);
@@ -135,17 +134,17 @@ const refreshAccessToken = async (refreshToken) => {
   });
 
   if (!storedToken) {
-    throw new Error("Invalid refresh token");
+    throw ApiError.badRequest("Invalid refresh token");
   }
 
   if (storedToken.expiresAt < new Date()) {
     await RefreshToken.deleteOne({ _id: storedToken });
-    throw new Error("Refresh token expired");
+    throw ApiError.badRequest("Refresh token expired");
   }
   const user = await User.findById(decoded.userId);
 
   if (!user || !user.isActive) {
-    throw new Error("User not found or inActive");
+    throw ApiError.badRequest("User not found or inActive");
   }
   await RefreshToken.deleteOne({
     _id: storedToken._id,
@@ -181,7 +180,7 @@ const loginWithGoogle = async (googleData) => {
   } = googleData;
 
   if (!email_verified) {
-    throw new Error("Google email is not verified");
+    throw ApiError.badRequest("Google email is not verified");
   }
 
   let user = await User.findOne({
@@ -252,7 +251,7 @@ const forgotPassword = async (email) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error("No user found with this email");
+    throw ApiError.notFound("No user found with this email");
   }
 
   const resetToken = generateResetToken();
@@ -282,7 +281,7 @@ const resetPassword = async (token, newPassword) => {
   });
 
   if (!user) {
-    throw new Error("Invalid or expired password reset token");
+    throw ApiError.badRequest("Invalid or expired password reset token");
   }
   const hashedPassword = await bcrypt.hash(newPassword, 12);
 
@@ -300,7 +299,7 @@ const getMe = async (userId) => {
   const user = await User.findById(userId).select("-password");
 
   if (!user) {
-    throw new Error("User not found");
+    throw ApiError.notFound("User not found");
   }
 
   return user;
