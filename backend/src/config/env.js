@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 
 dotenv.config();
+// dotenv.config({ path: __dirname + "/../../.env" });
 
 module.exports = {
   nodeEnv: process.env.NODE_ENV || "development",
@@ -16,3 +17,5 @@ module.exports = {
 
   clientUrl: process.env.CLIENT_URL,
 };
+
+console.log("Loaded MONGO_URI:", process.env.MONGO_URI);

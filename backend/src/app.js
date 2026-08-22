@@ -4,25 +4,19 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 
-
-//routes
-const authRoutes=require("./modules/auth/auth.routes");
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(cookieParser());
-
 app.use(morgan("dev"));
 
 app.get("/api/health", (req, res) => {
@@ -32,11 +26,17 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+//routes
+const authRoutes = require("./modules/auth/auth.routes");
 
-//endpoints
+const trackRoutes = require("./modules/track/track.routes");
 
-app.use("/api/auth",authRoutes);
+const reviewRoutes = require("./modules/reviews/review.routes");
 
+// بعد authRoutes
 
+app.use("/api/tracks", trackRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/auth", authRoutes);
 
 module.exports = app;
