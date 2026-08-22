@@ -1,72 +1,43 @@
-const Progress = require('./progress.model.js');
+const progressService = require("./progress.service.js");
 
-const getMyProgress = async (req, res) => {
+const getMyProgress = async (req, res, next) => {
   try {
-    let progress = await Progress.findOne({ userId: req.user._id })
-      .populate('completedCourses')
-      .populate('completedChallenges');
-
-   
-    if (!progress) {
-      progress = await Progress.create({ userId: req.user._id });
-    }
+    const progress = await progressService.getUserProgress(req.user._id);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { progress },
     });
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: 'error fetching progress',
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const markCourseComplete = async (req, res) => {
+const markCourseComplete = async (req, res, next) => {
   try {
     const { courseId } = req.params;
-
-    const progress = await Progress.findOneAndUpdate(
-      { userId: req.user._id },
-      { $addToSet: { completedCourses: courseId } },
-      { new: true, upsert: true }
-    ).populate('completedCourses').populate('completedChallenges');
+    const progress = await progressService.markCourseAsComplete(req.user._id, courseId);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { progress },
     });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'error updating course progress',
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const markChallengeComplete = async (req, res) => {
+const markChallengeComplete = async (req, res, next) => {
   try {
     const { challengeId } = req.params;
-
-    const progress = await Progress.findOneAndUpdate(
-      { userId: req.user._id },
-      { $addToSet: { completedChallenges: challengeId } },
-      { new: true, upsert: true }
-    ).populate('completedCourses').populate('completedChallenges');
+    const progress = await progressService.markChallengeAsComplete(req.user._id, challengeId);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { progress },
     });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'error updating challenge progress',
-      error: error.message,
-    });
+    next(error);
   }
 };
 

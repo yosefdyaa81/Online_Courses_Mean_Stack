@@ -1,196 +1,89 @@
-const User = require('./user.model.js');
+const userService = require("./user.service");
 
-
-
-
-const getme = async (req, res) => {
+const getme = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
-
+    const user = await userService.getUserById(req.user._id);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { user },
     });
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: "error fetching user",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
-
+    const users = await userService.getAllUsers();
     res.status(200).json({
-      status: 'success',
+      status: "success",
       results: users.length,
       data: { users },
     });
   } catch (error) {
-    res.status(500).json({
-      status: 'error',
-      message: "error fetching users",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getUserById = async (req, res) => {
+const getUserById = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({
-        status: 'fail',
-        message: "user not found",
-      });
-    }
-
+    const user = await userService.getUserById(req.params.id);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { user },
     });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: "invalid user ID",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-
-    const allowedFields = ['name', 'avatar', 'bio'];
-    const updatedData = {};
-
-    allowedFields.forEach((field) => {
-      if (req.body[field] !== undefined) {
-        updatedData[field] = req.body[field];
-      }
-    });
-
-    const user = await User.findByIdAndUpdate(userId, updatedData, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status: 'fail',
-        message: "user not found",
-      });
-    }
-
+    const user = await userService.updateUser(req.user._id, req.body);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { user },
     });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: "error updating user",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-
-const updateUserRole = async (req, res) => {
+const updateUserRole = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const { role } = req.body;
-
-    if (!role) {
-      return res.status(400).json({
-        status: 'fail',
-        message: "role field is required",
-      });
-    }
-
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { role },
-      { new: true, runValidators: true }
-    );
-
-    if (!user) {
-      return res.status(404).json({
-        status: 'fail',
-        message: "user not found",
-      });
-    }
-
+    const user = await userService.updateUserRole(req.params.id, req.body.role);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { user },
     });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: "error updating user role",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-
-const deleteMe = async (req, res) => {
+const deleteMe = async (req, res, next) => {
   try {
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      { isActive: false },
-      { new: true }
-    );
-
+    await userService.disableUser(req.user._id);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       message: "Account has been disabled successfully",
     });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: "Error while disabling account",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { isActive: false },
-      { new: true }
-    );
-
-    if (!user) {
-      return res.status(404).json({
-        status: 'fail',
-        message: "User not found",
-      });
-    }
-
+    await userService.disableUser(req.params.id);
     res.status(200).json({
-      status: 'success',
+      status: "success",
       message: "User account has been disabled successfully",
     });
   } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: "Error while disabling user account",
-      error: error.message,
-    });
+    next(error);
   }
-};;
+};
 
 module.exports = {
   getAllUsers,
@@ -199,5 +92,5 @@ module.exports = {
   updateUserRole,
   deleteMe,
   deleteUser,
-  getme
+  getme,
 };
