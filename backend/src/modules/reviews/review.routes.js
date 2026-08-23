@@ -9,10 +9,10 @@ const {
 } = require("./review.controller");
 const { restrictTo, protect } = require("../../middlewares/auth.middleware");
 
-router.post("/", protect, restrictTo("admin"), createReview);
+router.post("/", protect, createReview);
 router.get("/", getReviews);
 router.get("/:id", getReviewById);
-router.patch("/:id", protect, restrictTo("admin"), updateReview);
-router.delete("/:id", protect, restrictTo("admin"), deleteReview);
+router.patch("/:id", protect, updateReview);
+router.delete("/:id", protect, deleteReview);
 
 module.exports = router;
