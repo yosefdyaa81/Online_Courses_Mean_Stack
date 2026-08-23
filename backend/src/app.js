@@ -7,6 +7,8 @@ const cookieParser = require("cookie-parser");
 
 //routes
 const authRoutes=require("./modules/auth/auth.routes");
+const userRoutes=require("./modules/users/user.routes");
+const progressRoutes=require("./modules/progress/progress.routes");
 const categoryRoutes = require("./modules/category/category.routes");
 const courseRoutes = require("./modules/course/course.routes");
 const topicRoutes=require("./modules/topic/topic.routes");
@@ -40,6 +42,18 @@ app.get("/api/health", (req, res) => {
 //endpoints
 
 app.use("/api/auth",authRoutes);
+app.use("/api/users",userRoutes);
+app.use("/api/progress",progressRoutes);
+
+app.use("/api/categories",categoryRoutes);
+
+app.use("/api/courses", courseRoutes);
+
+app.use("/api/topics",topicRoutes);
+
+
+
+
 
 app.use("/api/categories",categoryRoutes);
 
