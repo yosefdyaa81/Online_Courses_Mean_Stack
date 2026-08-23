@@ -1,44 +1,56 @@
-const Progress = require("./progress.model.js");
-const Course = require("../course/course.model.js");
+const Progress = require("./progress.model");
+const Course = require("../course/course.model"); 
 const ApiError = require("../../utils/ApiError");
-
-const getUserProgress = async (userId) => {
+const getOrCreateProgress = async (userId) => {
   let progress = await Progress.findOne({ userId }).populate("completedCourses");
-
   if (!progress) {
-    progress = await Progress.create({ userId });
+    progress = await Progress.create({ userId, completedCourses: [], completedChallenges: [] });
   }
-
   return progress;
 };
 
-const markCourseAsComplete = async (userId, courseId) => {
+const completeCourse = async (userId, courseId) => {
   const course = await Course.findById(courseId);
-  if (!course) {
-    throw ApiError.notFound("Course not found");
-  }
+  if (!course) throw new ApiError("Course not found", 404);
 
-  const progress = await Progress.findOneAndUpdate(
+  return await Progress.findOneAndUpdate(
     { userId },
     { $addToSet: { completedCourses: courseId } },
     { new: true, upsert: true }
   ).populate("completedCourses");
-
-  return progress;
 };
 
-const markChallengeAsComplete = async (userId, challengeId) => {
-  const progress = await Progress.findOneAndUpdate(
+const uncompleteCourse = async (userId, courseId) => {
+  const course = await Course.findById(courseId);
+  if (!course) throw new ApiError("Course not found", 404);
+
+  return await Progress.findOneAndUpdate(
+    { userId },
+    { $pull: { completedCourses: courseId } },
+    { new: true }
+  ).populate("completedCourses");
+};
+
+const completeChallenge = async (userId, challengeId) => {
+  return await Progress.findOneAndUpdate(
     { userId },
     { $addToSet: { completedChallenges: challengeId } },
     { new: true, upsert: true }
-  ).populate("completedCourses");
+  );
+};
 
-  return progress;
+const uncompleteChallenge = async (userId, challengeId) => {
+  return await Progress.findOneAndUpdate(
+    { userId },
+    { $pull: { completedChallenges: challengeId } },
+    { new: true }
+  );
 };
 
 module.exports = {
-  getUserProgress,
-  markCourseAsComplete,
-  markChallengeAsComplete,
+  getOrCreateProgress,
+  completeCourse,
+  uncompleteCourse,
+  completeChallenge,
+  uncompleteChallenge,
 };

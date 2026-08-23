@@ -3,25 +3,54 @@ const progressRouter = express.Router();
 
 const {
   getMyProgress,
+  getUserProgress,
   markCourseComplete,
+  unmarkCourseComplete,
   markChallengeComplete,
-} = require("./progress.controller.js");
+  unmarkChallengeComplete,
+} = require("./progress.controller");
 
-const { protect } = require("../../middlewares/auth.middleware.js");
-const { validate } = require("../../middlewares/validate.middleware.js");
-const { courseIdParamSchema, challengeIdParamSchema } = require("./progress.validator.js");
+const { protect, restrictTo } = require("../../middlewares/auth.middleware");
+const validate = require("../../middlewares/validate.middleware");
+const {
+  courseIdParamSchema,
+  challengeIdParamSchema,
+  userIdParamSchema,
+} = require("./progress.validator");
 
 progressRouter.use(protect);
 
-progressRouter.get("/me", getMyProgress);
-progressRouter.patch("/complete-course/:courseId",
+progressRouter.get("/me", getMyProgress); //tested
+
+progressRouter.get(
+  "/user/:userId",
+  restrictTo("admin"),
+  validate(userIdParamSchema, "params"),
+  getUserProgress
+); //tested
+
+progressRouter.patch(
+  "/complete-course/:courseId",
   validate(courseIdParamSchema, "params"),
   markCourseComplete
-);
+);//tested
+
+progressRouter.patch(
+  "/uncomplete-course/:courseId",
+  validate(courseIdParamSchema, "params"),
+  unmarkCourseComplete
+);//tested
+
 progressRouter.patch(
   "/complete-challenge/:challengeId",
   validate(challengeIdParamSchema, "params"),
   markChallengeComplete
+);
+
+progressRouter.patch(
+  "/uncomplete-challenge/:challengeId",
+  validate(challengeIdParamSchema, "params"),
+  unmarkChallengeComplete
 );
 
 module.exports = progressRouter;

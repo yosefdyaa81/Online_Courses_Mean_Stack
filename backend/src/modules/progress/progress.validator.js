@@ -1,5 +1,4 @@
 const Joi = require("joi");
-
 const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
 const courseIdParamSchema = Joi.object({
@@ -16,7 +15,15 @@ const challengeIdParamSchema = Joi.object({
   }),
 });
 
+const userIdParamSchema = Joi.object({
+  userId: Joi.string().pattern(objectIdPattern).required().messages({
+    "string.pattern.base": "Invalid User ID format",
+    "any.required": "User ID is required",
+  }),
+});
+
 module.exports = {
   courseIdParamSchema,
   challengeIdParamSchema,
+  userIdParamSchema,
 };

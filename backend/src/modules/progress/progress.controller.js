@@ -1,48 +1,52 @@
-const progressService = require("./progress.service.js");
+const progressService = require("./progress.service");
 
 const getMyProgress = async (req, res, next) => {
   try {
-    const progress = await progressService.getUserProgress(req.user._id);
+    const progress = await progressService.getOrCreateProgress(req.user._id);
+    res.status(200).json({ status: "success", data: { progress } });
+  } catch (err) { next(err); }
+};
 
-    res.status(200).json({
-      status: "success",
-      data: { progress },
-    });
-  } catch (error) {
-    next(error);
-  }
+const getUserProgress = async (req, res, next) => {
+  try {
+    const progress = await progressService.getOrCreateProgress(req.params.userId);
+    res.status(200).json({ status: "success", data: { progress } });
+  } catch (err) { next(err); }
 };
 
 const markCourseComplete = async (req, res, next) => {
   try {
-    const { courseId } = req.params;
-    const progress = await progressService.markCourseAsComplete(req.user._id, courseId);
+    const progress = await progressService.completeCourse(req.user._id, req.params.courseId);
+    res.status(200).json({ status: "success", data: { progress } });
+  } catch (err) { next(err); }
+};
 
-    res.status(200).json({
-      status: "success",
-      data: { progress },
-    });
-  } catch (error) {
-    next(error);
-  }
+const unmarkCourseComplete = async (req, res, next) => {
+  try {
+    const progress = await progressService.uncompleteCourse(req.user._id, req.params.courseId);
+    res.status(200).json({ status: "success", data: { progress } });
+  } catch (err) { next(err); }
 };
 
 const markChallengeComplete = async (req, res, next) => {
   try {
-    const { challengeId } = req.params;
-    const progress = await progressService.markChallengeAsComplete(req.user._id, challengeId);
+    const progress = await progressService.completeChallenge(req.user._id, req.params.challengeId);
+    res.status(200).json({ status: "success", data: { progress } });
+  } catch (err) { next(err); }
+};
 
-    res.status(200).json({
-      status: "success",
-      data: { progress },
-    });
-  } catch (error) {
-    next(error);
-  }
+const unmarkChallengeComplete = async (req, res, next) => {
+  try {
+    const progress = await progressService.uncompleteChallenge(req.user._id, req.params.challengeId);
+    res.status(200).json({ status: "success", data: { progress } });
+  } catch (err) { next(err); }
 };
 
 module.exports = {
   getMyProgress,
+  getUserProgress,
   markCourseComplete,
+  unmarkCourseComplete,
   markChallengeComplete,
+  unmarkChallengeComplete,
 };
