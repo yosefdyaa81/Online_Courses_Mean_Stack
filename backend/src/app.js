@@ -55,6 +55,16 @@ app.use("/api/topics",topicRoutes);
 
 
 
+app.use("/api/categories",categoryRoutes);
+
+app.use("/api/courses", courseRoutes);
+
+app.use("/api/topics",topicRoutes);
+
+
+
+
+
 
 const errorHandler = require("./middlewares/error.middleware");
 app.use(errorHandler);
