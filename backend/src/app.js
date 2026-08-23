@@ -4,17 +4,21 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 
-//routes
 const authRoutes = require("./modules/auth/auth.routes");
+const userRoutes = require("./modules/users/user.routes");
+const progressRoutes = require("./modules/progress/progress.routes");
 const categoryRoutes = require("./modules/category/category.routes");
 const courseRoutes = require("./modules/course/course.routes");
 const topicRoutes = require("./modules/topic/topic.routes");
 
+const trackRoutes = require("./modules/track/track.routes");
+
+const reviewRoutes = require("./modules/reviews/review.routes");
+
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -22,7 +26,11 @@ app.use(
   }),
 );
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
+
 app.use(morgan("dev"));
 
 app.get("/api/health", (req, res) => {
@@ -32,20 +40,24 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-//routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/progress", progressRoutes);
 
-const trackRoutes = require("./modules/track/track.routes");
+app.use("/api/categories", categoryRoutes);
 
-const reviewRoutes = require("./modules/reviews/review.routes");
+app.use("/api/courses", courseRoutes);
 
-// بعد authRoutes
+app.use("/api/topics", topicRoutes);
+
+app.use("/api/categories", categoryRoutes);
+
+app.use("/api/courses", courseRoutes);
+
+app.use("/api/topics", topicRoutes);
 
 app.use("/api/tracks", trackRoutes);
 app.use("/api/reviews", reviewRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/courses", courseRoutes);
-app.use("/api/topics", topicRoutes);
 
 const errorHandler = require("./middlewares/error.middleware");
 app.use(errorHandler);
