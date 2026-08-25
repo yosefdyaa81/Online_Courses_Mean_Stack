@@ -1,0 +1,47 @@
+@if (loading) {
+  <div class="state">Loading track...</div>
+} @else if (error) {
+  <div class="state error">
+    {{ error }}
+  </div>
+} @else if (track) {
+  <section class="track-details">
+    <div class="track-header">
+      <span class="eyebrow">LEARNING TRACK</span>
+
+      <h1>{{ track.title }}</h1>
+
+      <p>{{ track.description }}</p>
+
+      <div class="track-meta">
+        <span>{{ track.courses?.length || 0 }} Courses</span>
+        <span>Structured Learning Path</span>
+      </div>
+    </div>
+
+    <div class="courses-section">
+      <div class="section-title">
+        <span class="eyebrow">CURRICULUM</span>
+        <h2>Courses in this Track</h2>
+      </div>
+
+      <div class="courses-list">
+        @for (course of track.courses; track course._id) {
+          <a class="course-row" [routerLink]="['/courses', course._id]">
+            <div class="course-number">
+              {{ $index + 1 | number: '2.0' }}
+            </div>
+
+            <div class="course-info">
+              <h3>{{ course.title }}</h3>
+
+              <p>{{ course.description }}</p>
+            </div>
+
+            <div class="course-arrow">→</div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+}

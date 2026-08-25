@@ -20,7 +20,10 @@ const createTopic = async (data) => {
     );
   }
 
-  return await Topic.create(data);
+  
+  const topic = await Topic.create(data);
+
+  return await topic.populate("course", "title slug");
 };
 
 
@@ -108,11 +111,12 @@ const deleteTopic = async (id) => {
   await topic.deleteOne();
 };
 
+
 module.exports = {
   createTopic,
   getTopics,
   getTopicsByCourse,
   getTopicById,
   updateTopic,
-  deleteTopic,
+  deleteTopic
 };

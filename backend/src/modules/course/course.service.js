@@ -21,7 +21,9 @@ const createCourse = async (data) => {
     throw new Error("Category not found");
   }
 
-  return await Course.create(data);
+  const course = await Course.create(data);
+
+  return await course.populate("category", "name slug");
 };
 
 

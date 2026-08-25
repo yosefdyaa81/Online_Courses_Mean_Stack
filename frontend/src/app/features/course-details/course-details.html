@@ -1,0 +1,63 @@
+@if (loading) {
+  <div class="state">Loading course...</div>
+} @else if (error) {
+  <div class="state error">
+    {{ error }}
+  </div>
+} @else if (course) {
+  <section class="course-page">
+    <div class="course-hero">
+      <div class="course-hero-content">
+        <span class="eyebrow">COURSE</span>
+
+        <h1>{{ course.title }}</h1>
+
+        <p>{{ course.description }}</p>
+
+        <div class="course-stats">
+          <span>{{ topics.length }} Topics</span>
+          <span>Self-paced</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="content-header">
+        <div>
+          <span class="eyebrow">COURSE CONTENT</span>
+          <h2>What you'll learn</h2>
+        </div>
+
+        <span> {{ topics.length }} Topics </span>
+      </div>
+
+      <div class="topics">
+        @for (topic of topics; track topic._id) {
+          <article class="topic-card">
+            <div class="topic-number">
+              {{ $index + 1 | number: '2.0' }}
+            </div>
+
+            <div class="topic-info">
+              <h3>{{ topic.title }}</h3>
+
+              <span
+                class="level"
+                [class.beginner]="topic.level === 'beginner'"
+                [class.intermediate]="topic.level === 'intermediate'"
+                [class.advanced]="topic.level === 'advanced'"
+              >
+                {{ topic.level }}
+              </span>
+            </div>
+
+            <button (click)="openPlaylist(topic.playlistUrl)">
+              Watch Playlist
+              <span>↗</span>
+            </button>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+}

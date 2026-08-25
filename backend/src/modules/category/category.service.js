@@ -23,7 +23,7 @@ const getCategories = async () => {
 
 
 const getCategoryById = async (id) => {
-  const category = await Category.findById(id);
+  const category = await Category.findById(id)
 
   if (!category) {
     throw ApiError.notFound("Category not found");

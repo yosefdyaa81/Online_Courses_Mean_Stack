@@ -1,0 +1,67 @@
+<section class="tracks-page">
+  <div class="hero">
+    <span class="eyebrow">LEARN WITHOUT LIMITS</span>
+
+    <h1>
+      Choose your path.
+      <span>Build your future.</span>
+    </h1>
+
+    <p>
+      Follow a structured learning path and master the skills you need to become a professional
+      developer.
+    </p>
+  </div>
+
+  <div class="section-header">
+    <div>
+      <span class="eyebrow">LEARNING PATHS</span>
+      <h2>Explore Tracks</h2>
+    </div>
+
+    <p>Choose a track and start your journey.</p>
+  </div>
+
+  @if (loading) {
+    <div class="state">Loading tracks...</div>
+  }
+
+  @if (error) {
+    <div class="state error">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error) {
+    <div class="tracks-grid">
+      @for (track of tracks; track track._id) {
+        <article class="track-card">
+          <div class="track-image">
+            @if (track.thumbnail) {
+              <img [src]="track.thumbnail" [alt]="track.title" />
+            } @else {
+              <div class="image-placeholder">
+                {{ track.title.charAt(0) }}
+              </div>
+            }
+
+            <span class="course-count"> {{ track.courses?.length || 0 }} Courses </span>
+          </div>
+
+          <div class="track-content">
+            <h3>{{ track.title }}</h3>
+
+            <p>
+              {{ track.description }}
+            </p>
+
+            <a [routerLink]="['/tracks', track._id]" class="explore-btn">
+              Explore Track
+              <span>→</span>
+            </a>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

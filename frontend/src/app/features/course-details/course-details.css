@@ -1,0 +1,149 @@
+.course-page {
+  min-height: 100vh;
+  background: #f2f2f2;
+  color: #1a1e26;
+}
+
+.course-hero {
+  padding: 90px 8%;
+  background: #1a1e26;
+  color: white;
+}
+
+.course-hero-content {
+  max-width: 850px;
+}
+
+.course-hero .eyebrow {
+  color: #d9ccc5;
+}
+
+.course-hero h1 {
+  font-size: clamp(42px, 6vw, 72px);
+  margin: 0 0 25px;
+}
+
+.course-hero p {
+  color: #d9ccc5;
+  font-size: 19px;
+  line-height: 1.8;
+  max-width: 700px;
+}
+
+.course-stats {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.course-stats span {
+  padding: 10px 16px;
+  background: #65736a;
+  border-radius: 30px;
+  font-size: 13px;
+}
+
+.content {
+  padding: 70px 8%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 35px;
+}
+
+.content-header h2 {
+  margin: 0;
+  font-size: 38px;
+}
+
+.content-header > span {
+  color: #65736a;
+}
+
+.topics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.topic-card {
+  display: grid;
+  grid-template-columns: 70px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 22px;
+  background: white;
+  border: 1px solid #d9ccc5;
+  border-radius: 14px;
+  transition: 0.2s;
+}
+
+.topic-card:hover {
+  border-color: #7b8c81;
+  transform: translateX(5px);
+}
+
+.topic-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: #7b8c81;
+}
+
+.topic-info h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.level {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #65736a;
+}
+
+.topic-card button {
+  border: 0;
+  background: #1a1e26;
+  color: white;
+  padding: 12px 17px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.topic-card button:hover {
+  background: #65736a;
+}
+
+.state {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  background: #f2f2f2;
+  color: #65736a;
+}
+
+.error {
+  color: #1a1e26;
+}
+
+@media (max-width: 700px) {
+
+  .topic-card {
+    grid-template-columns: 45px 1fr;
+  }
+
+  .topic-card button {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .content-header {
+    display: block;
+  }
+}
