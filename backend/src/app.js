@@ -43,34 +43,11 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/progress", progressRoutes);
-
 app.use("/api/categories", categoryRoutes);
-
 app.use("/api/courses", courseRoutes);
-
 app.use("/api/topics", topicRoutes);
-
-app.use("/api/categories", categoryRoutes);
-
-app.use("/api/courses", courseRoutes);
-
-app.use("/api/topics", topicRoutes);
-
-<<<<<<< HEAD
 app.use("/api/tracks", trackRoutes);
 app.use("/api/reviews", reviewRoutes);
-=======
-app.use("/api/categories",categoryRoutes);
-
-app.use("/api/courses", courseRoutes);
-
-app.use("/api/topics",topicRoutes);
-
-
-
-
-
->>>>>>> f9d2061887e4d10c8e37ae12d633a4e15721c926
 
 const errorHandler = require("./middlewares/error.middleware");
 app.use(errorHandler);
