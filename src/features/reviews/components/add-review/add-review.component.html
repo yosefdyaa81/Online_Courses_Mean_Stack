@@ -1,0 +1,33 @@
+
+<div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">Write a Review</h2>
+
+  <!-- Course Dropdown -->
+  <label for="course" class="block text-gray-700 font-medium mb-2">Course</label>
+  <select [(ngModel)]="selectedCourseId" id="course"
+          class="border px-3 py-2 w-full rounded-md focus:ring-2 focus:ring-blue-500">
+    <option value="">Select a course</option>
+    <option *ngFor="let c of courses" [value]="c._id">{{ c.title }}</option>
+  </select>
+
+  <!-- Rating -->
+  <label class="block text-gray-700 font-medium mt-4 mb-2">Overall Rating</label>
+  <div class="flex space-x-2">
+    <span *ngFor="let star of [1,2,3,4,5]"
+          (click)="rating = star"
+          [class.text-yellow-500]="star <= rating"
+          class="cursor-pointer text-2xl">★</span>
+  </div>
+
+  <!-- Comment -->
+  <label for="comment" class="block text-gray-700 font-medium mt-4 mb-2">Add a Review</label>
+  <textarea [(ngModel)]="comment" id="comment"
+            class="border px-3 py-2 w-full rounded-md focus:ring-2 focus:ring-blue-500"
+            rows="4"></textarea>
+
+  <!-- Submit Button -->
+  <button (click)="submitReview()"
+          class="mt-6 w-full px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+    Submit Review
+  </button>
+</div>

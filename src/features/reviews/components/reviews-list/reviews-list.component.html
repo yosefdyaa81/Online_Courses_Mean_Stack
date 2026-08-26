@@ -1,0 +1,47 @@
+  <div class="max-w-4xl mx-auto mt-10">
+  <!-- Page Title -->
+  <h2 class="text-3xl font-bold text-gray-800 mb-8">All Reviews</h2>
+
+  <!-- Reviews Loop -->
+  <div *ngFor="let review of reviewList"
+       class="p-6 mb-6 border rounded-lg shadow-sm bg-white hover:shadow-md transition">
+
+    <!-- Course Title -->
+    <h3 class="text-xl font-semibold text-gray-900">{{ review.course.title }}</h3>
+
+    <!-- Rating Stars -->
+    <p class="text-yellow-500 text-lg mt-2">
+      {{ '★'.repeat(review.rating) }}
+    </p>
+
+    <!-- Comment -->
+    <p class="text-gray-700 mt-3">{{ review.comment }}</p>
+
+    <!-- User + Date -->
+    <div class="flex justify-between items-center mt-4 text-sm text-gray-500">
+      <span>By {{ review.user?.name || 'Anonymous' }}</span>
+      <span>{{ review.createdAt | date:'medium' }}</span>
+    </div>
+
+    <!-- Delete Button -->
+    <!-- <button *ngIf="review._id"
+            (click)="deleteReview(review._id)"
+            class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition">
+      Delete
+    </button> -->
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="reviewList.length === 0"
+       class="text-center text-gray-500 mt-10">
+    No reviews yet. Be the first to add one!
+  </div>
+
+  <!-- Add Review Button -->
+  <div class="mb-6 text-right">
+    <a routerLink="/reviews/add"
+       class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+      + Add Review
+    </a>
+  </div>
+</div>
